@@ -4,6 +4,7 @@ from dash import dcc, html
 from dash.dependencies import Input, Output
 import plotly.express as px
 from pymongo import MongoClient
+from flask import Flask, Blueprint, jsonify
 
 # MongoDB connection setup
 mongo_conn_string = 'mongodb+srv://bdat1004:1004@1004.vza4tnd.mongodb.net/?retryWrites=true&w=majority'
@@ -11,9 +12,38 @@ client = MongoClient(mongo_conn_string)
 db = client['economic_data']
 economic_series_collection = db['economic_series']
 
-# Initialize Dash app
-app = dash.Dash(__name__)
-server = app.server
+# Create Flask app and Dash app
+server = Flask(__name__)
+app = dash.Dash(__name__, server=server)
+
+# Define cloud API Blueprint
+cloud_api_bp = Blueprint('cloud_api', __name__)
+
+# API endpoint to get all items
+@cloud_api_bp.route('/get-all', methods=['GET'])
+def get_all():
+    data = list(economic_series_collection.find({}, {'_id': 0}))
+    return jsonify(data)
+
+# API endpoint to get a range of items
+@cloud_api_bp.route('/get-range/<start>/<end>', methods=['GET'])
+def get_range(start, end):
+    data = list(economic_series_collection.find({}, {'_id': 0}).skip(int(start)).limit(int(end)))
+    return jsonify(data)
+
+# API endpoint to get an item by ID
+@cloud_api_bp.route('/get-by-id/<id>', methods=['GET'])
+def get_by_id(id):
+    data = economic_series_collection.find_one({'id': id}, {'_id': 0})
+    return jsonify(data) if data else jsonify({'error': 'Item not found'})
+
+# Test API endpoint
+@cloud_api_bp.route('/test', methods=['GET'])
+def test():
+    return jsonify({'message': 'API is working'})
+
+# Register the cloud API Blueprint
+app.server.register_blueprint(cloud_api_bp, url_prefix='/cloud-api')
 
 # Function to fetch data from MongoDB
 def fetch_data_from_mongo(series_id):
