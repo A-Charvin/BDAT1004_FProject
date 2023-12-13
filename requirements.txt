@@ -5,3 +5,4 @@ dash-daq
 plotly
 requests
 pandas
+gunicorn
