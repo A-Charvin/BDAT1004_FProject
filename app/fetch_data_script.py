@@ -16,6 +16,6 @@ def fetch_data_job():
 # Create scheduler
 scheduler = BlockingScheduler()
 # Run the job every 14 hours
-scheduler.add_job(fetch_data_job, 'interval', hours=14)
+scheduler.add_job(fetch_data_job, 'interval', hours=24)
 # Start the scheduler
 scheduler.start()
