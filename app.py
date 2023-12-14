@@ -94,4 +94,4 @@ def update_chart(selected_series):
 
 # Run the app
 if __name__ == '__main__':
-    application.run_server(debug=True)
+    application.run_server(debug=True,host='0.0.0.0')
