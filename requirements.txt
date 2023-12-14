@@ -1,8 +1,12 @@
-Flask
-pymongo
 dash
-dash-daq
+dash-html-components
+dash-core-components
 plotly
+pymongo
+flask
+flask-blueprint
 requests
 pandas
+
 gunicorn
+psycopg2-binary
