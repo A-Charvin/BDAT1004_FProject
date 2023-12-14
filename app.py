@@ -14,9 +14,7 @@ economic_series_collection = db['economic_series']
 
 # Create Flask app and Dash app
 app = dash.Dash(__name__)
-# server = app.server
 server = Flask(__name__)
-gunicorn app:server
 
 # Define cloud API Blueprint
 cloud_api_bp = Blueprint('cloud_api', __name__)
