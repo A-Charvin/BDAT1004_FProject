@@ -13,8 +13,8 @@ db = client['economic_data']
 economic_series_collection = db['economic_series']
 
 # Create Flask app and Dash app
-appt = Flask(__name__)
-app = dash.Dash(__name__, server=appt)
+server = Flask(__name__)
+app = dash.Dash(__name__, server=server)
 
 # Define cloud API Blueprint
 cloud_api_bp = Blueprint('cloud_api', __name__)
