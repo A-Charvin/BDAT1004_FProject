@@ -14,7 +14,7 @@ economic_series_collection = db['economic_series']
 
 # Create Flask app and Dash app
 server = Flask(__name__)
-app = dash.Dash(__name__, server=server)
+application = dash.Dash(__name__, server=server)
 
 # Define cloud API Blueprint
 cloud_api_bp = Blueprint('cloud_api', __name__)
@@ -43,7 +43,7 @@ def test():
     return jsonify({'message': 'API is working'})
 
 # Register the cloud API Blueprint
-app.server.register_blueprint(cloud_api_bp, url_prefix='/cloud-api')
+application.server.register_blueprint(cloud_api_bp, url_prefix='/cloud-api')
 
 # Function to fetch data from MongoDB
 def fetch_data_from_mongo(series_id):
@@ -54,7 +54,7 @@ def fetch_data_from_mongo(series_id):
         return []
 
 # App layout
-app.layout = html.Div([
+application.layout = html.Div([
     html.H1("Economic Data Dashboard"),
     
     # Dropdown for series selection
@@ -76,7 +76,7 @@ app.layout = html.Div([
 ])
 
 # Callback to update Plotly chart
-@app.callback(
+@application.callback(
     Output('line-chart', 'figure'),
     [Input('series-dropdown', 'value')]
 )
@@ -94,4 +94,4 @@ def update_chart(selected_series):
 
 # Run the app
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    application.run_server(debug=True)
